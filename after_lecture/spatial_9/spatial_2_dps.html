@@ -134,10 +134,9 @@ include-before-body:
     }
     
 --- -->
-<section id="do-pair-share-solution-i" class="level2">
-<h2 class="anchored" data-anchor-id="do-pair-share-solution-i">do pair share solution I</h2>
-<p>Create the dissolved dataset with indicator for dense</p>
-<div id="5f7c6747" class="cell" data-execution_count="1">
+<section id="do-pair-share-solution-step-1" class="level2">
+<h2 class="anchored" data-anchor-id="do-pair-share-solution-step-1">do pair share solution – step 1</h2>
+<div id="7aa54eb5" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>filepath <span class="op">=</span> <span class="st">"data/austin_pop_density_2019.gpkg"</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> gpd.read_file(filepath)</span>
@@ -150,7 +149,7 @@ include-before-body:
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>dissolved <span class="op">=</span> dissolved.reset_index()</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>dissolved</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>dissolved.loc[dissolved[<span class="st">"dense"</span>] <span class="op">==</span> <span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <div>
 
 
@@ -168,7 +167,7 @@ include-before-body:
 <tr class="odd">
 <td data-quarto-table-cell-role="th">1</td>
 <td>1</td>
-<td>MULTIPOLYGON (((612263.531 3338931.8, 612265.2...</td>
+<td>MULTIPOLYGON (((612263.531 3338931.800, 612265...</td>
 <td>242943.0</td>
 <td>71.23457</td>
 </tr>
@@ -179,10 +178,9 @@ include-before-body:
 </div>
 </div>
 </section>
-<section id="do-pair-share-solution-ii" class="level2">
-<h2 class="anchored" data-anchor-id="do-pair-share-solution-ii">do pair share solution II</h2>
-<p>Subset to just the dense area, then add a 500 meter buffer and plot</p>
-<div id="ed2172f9" class="cell" data-execution_count="2">
+<section id="do-pair-share-solution-steps-1-2-and-3" class="level2">
+<h2 class="anchored" data-anchor-id="do-pair-share-solution-steps-1-2-and-3">do pair share solution – steps 1, 2 and 3</h2>
+<div id="ef85a70b" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>geo <span class="op">=</span> dissolved.loc[dissolved[<span class="st">"dense"</span>] <span class="op">==</span> <span class="dv">1</span>].<span class="bu">buffer</span>(<span class="dv">500</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>geo.plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -194,9 +192,9 @@ include-before-body:
 </div>
 </div>
 </section>
-<section id="do-pair-share-solution-iii-with-cosmetics" class="level2">
-<h2 class="anchored" data-anchor-id="do-pair-share-solution-iii-with-cosmetics">do pair share solution III – with cosmetics</h2>
-<div id="773b91ba" class="cell" data-execution_count="3">
+<section id="do-pair-share-solution-with-cosmetics" class="level2">
+<h2 class="anchored" data-anchor-id="do-pair-share-solution-with-cosmetics">do pair share solution – with cosmetics</h2>
+<div id="3f6e4a0a" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>austin <span class="op">=</span> data.plot(color<span class="op">=</span><span class="st">"grey"</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>geo <span class="op">=</span> dissolved.loc[dissolved[<span class="st">"dense"</span>] <span class="op">==</span> <span class="dv">1</span>].<span class="bu">buffer</span>(<span class="dv">500</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>geo.plot(ax<span class="op">=</span>austin, alpha<span class="op">=</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

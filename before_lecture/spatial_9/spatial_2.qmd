@@ -529,6 +529,7 @@ plt.show()
 
 ## spatial join V
 Spatial join options:
+
 * `how`: `inner` (default), `left`, `right`
 * `predicate`: `intersects` (default), `contains`, `covered_by`, `covers`, `crosses`, `overlaps`, `touches`, `within`
 * Discussion question: what is another type of join we could have used to identify tracts next to dense areas?
