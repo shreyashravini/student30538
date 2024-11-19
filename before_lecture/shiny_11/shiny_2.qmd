@@ -52,7 +52,7 @@ Professor Ganong wasn't able to get Altair plots to render alongside `ui.output_
 def server(input, output, session):
     @render.plot
     def my_hist():
-        sample = np.random.normal(input.mu(), 20, 200)
+        sample = np.random.normal(input.n(), 20, 200)
         fig, ax = plt.subplots()
         ax.hist(sample, bins=30, color='blue', alpha=0.7)
         return fig
@@ -71,6 +71,7 @@ def server(input, output, session):
 ```
 
 - Question: are we done, or do we need to add something to the UI-side?
+    - (Hint: we need to add to the UI-side whenever we add a feature that users will see)
 
 . . .
 
@@ -92,9 +93,9 @@ app_ui = ui.page_fluid(
 
 
 ## In-class exercise
-Goal: Update the app from last class using the code above
+Goal: Update the app using the code above
 
-1. navigate to app folder: `student30538/before_lecture/shiny_11/apps_for_class/normal_distn_app/`
+1. navigate using terminal to app folder: `student30538/before_lecture/shiny_11/apps_for_class/normal_distn_app/`
 2. In VSCode, modify `app.py` with the material from the prior slides in lecture
     * add the extra line in `app_ui` 
     * add the new function `my_sumstats()`
@@ -183,7 +184,7 @@ def my_sumstats():
 
 ## Reactive Functions: Normal Distribution Example
 - Question: do we need to go back to UI side and change anything?
-
+    - (Hint: we need to add to the UI-side whenever we add a feature that users will see)
 . . .
 
 - Answer: no, because we didn't change anything about what the app displays
@@ -221,7 +222,7 @@ So far we have seen `@reactive.calc`. Next lecture, we will also cover `@reactiv
 ```{python}
 @render.plot
 def my_hist():
-    sample = np.random.normal(input.n(), 20, 100)
+    sample = np.random.normal(input.mu(), 20, 100)
     fig, ax = plt.subplots()
     ax.hist(sample, bins=30, color='blue', alpha=0.7)
     return fig
@@ -278,7 +279,7 @@ def my_hist():
 7. Add a timeseries plot (next section)
 
 ## COVID Data Example: Data
-- Before we work on the app, let's familiarize ourselves with the data: `nyt_covid19_data.csv` 
+- Before we work on the app, let's familiarize ourselves with the data: `nyt_covid19_data.csv` (outside of a shiny app)
 
 
 
@@ -324,7 +325,6 @@ def server(input, output, session):
 app = App(app_ui, server)
 ```
 
-- Note: you can set it up manually, or you can load a basic Shiny template from command line like we did last class
 
 ## Step 2: Drop-down list 
 - We want to create a drop-down list with every state name
@@ -347,17 +347,6 @@ app_ui = ui.page_fluid(
 - Hard-coding every state name is not ideal. Next lecture, we'll discuss how to pre-populate this list.
 
 
-## Run the app
-- We're not done developing the app, but it's good practice to try running it every time we add something new
-- In Terminal:
-
-```{bash}
-shiny run --reload app.py
-```
-
-![](pictures/covidapp_1.png){ width=40% fig-align="center"}
-
-
 ## Step 3: Import data 
 - Next, we will import the data on the **server side** as a reactive function 
 
@@ -375,13 +364,13 @@ app = App(app_ui, server)
 
 ## Step 4: Filter to selected state 
 
-- Question: given how we've defined the dropdown menu on the **UI-side** (below), do you remember how we reference the state the user selects on the **server-side**?
+- Question: given how we've defined the dropdown menu on the **UI-side** (below), do you remember how we reference `"state"` **server-side**?
 
 
 ```{python}
 app_ui = ui.page_fluid(
     ui.input_select(id = 'state', label = 'Choose a state:',
-    choices = ... )
+    choices = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware"... )
 )
 
 ```
@@ -409,7 +398,7 @@ def server(input, output, session):
 ```
 
 ## Step 5: Display selected state data 
-- Then again on server-side, add a render function to make a table that we want to display (`@render.table()`)
+- Then again on server-side, add a render function to make a table that we want to display (`@render.table`)
 \AddToHookNext{env/Highlighting/begin}{\footnotesize}
 ```{python}
 def server(input, output, session):
@@ -422,7 +411,7 @@ def server(input, output, session):
         df = full_data()
         return df[df['state'] == input.state()]
     
-    @render.table()
+    @render.table
     def subsetted_data_table():
         return subsetted_data()
 ```
@@ -438,7 +427,7 @@ def server(input, output, session):
 ```{python}
 app_ui = ui.page_fluid(
     ui.input_select(id = 'state', label = 'Choose a state:',
-    choices = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]),
+    choices = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware"...),
     ui.output_table("subsetted_data_table")
 )
 ```
@@ -471,8 +460,8 @@ But will dynamically update once the user chooses a state
 ## COVID Data Example: Summary
 - Read in all the data (`full_data()`) and limit to one state(`subsetted_data()`)
 - Tips on developing your apps
-    - Develop your apps piece-by-piece and re-run at each step to debug
-    - **If the feature takes in user input**: start on UI side, then move to server side
+    - Develop your apps piece-by-piece, moving from UI side to server side
+    - **If the feature adds something new that the user sees**: you will have to make changes on the UI side
 
 # Case Study: COVID-19 Dashboard II
 
@@ -576,14 +565,14 @@ def server(input, output, session):
 ## Do-pair-share: adding to the app
 
 
-- App from last class shared in `student30538/before_lecture/shiny_11/apps_for_class/covid/app.py` 
+- Go to the app shared in: `student30538/before_lecture/shiny_11/apps_for_class/covid/app.py` 
 
-- Now add one more piece to the app: **radio buttons** that allow user to choose if they want to display cases or deaths
+- We want to add in one more piece to the app: **radio buttons** that allow user to choose if they want to display cases or deaths
 
 ![](pictures/radiobuttons.png){ width=40% fig-align="center"}
 
-- start with the easier step of adding radio buttons on the UI side
--  move to the harder step of modifying the function `ts()` to choose which variable to display based on radio input 
+- start by adding radio buttons on the UI side
+- move to the harder step of modifying the function `ts()` to choose which variable to display based on radio input 
 
 ## Whole Lecture Summary
 - We've covered a core component of dashboards: **reactive programming**
