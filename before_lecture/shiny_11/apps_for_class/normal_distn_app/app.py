@@ -15,5 +15,14 @@ def server(input, output, session):
         fig, ax = plt.subplots()
         ax.hist(sample, bins=30, color='blue', alpha=0.7)
         return fig
+    
+    @render.text
+    def my_sumstats():
+        sample = np.random.normal(input.n(), 20, 100)
+        min = np.min(sample)
+        max = np.max(sample)
+        median = np.median(sample)
+        return "Min:" + str(min) + ", Median: " + str(median), ", Max: " + str(max)
+
 
 app = App(app_ui, server)
